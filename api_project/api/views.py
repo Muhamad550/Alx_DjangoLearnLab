@@ -1,27 +1,23 @@
-from django.shortcuts import render
-from .serializers import BookSerializer
 from rest_framework.generics import ListAPIView
-from api.models import Book
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .permissions import IsAuthorOrReadOnly
+from .models import Book
+from .serializers import BookSerializer
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication
-# Create your views here.
-
-class BookList(ListAPIView):
-    quryset = Book.objects.all()
-    serializer_class = BookSerializer
+from rest_framework import viewsets
 
 
-class BookViewSet(viewsets.ModelViewSet):
-    querysets = Book.objects.all()
-    serializer_class = BookSerializer
-
-
-
-class PostListCreateAPIView(generics.ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+  
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()  # The data to be exposed via the API
+    serializer_class = BookSerializer  # The serializer that converts model instances into JSON
+
+
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access
