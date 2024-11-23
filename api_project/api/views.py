@@ -61,5 +61,3 @@ print(check_modelviewset(file_path))
 
 
 
-
-
